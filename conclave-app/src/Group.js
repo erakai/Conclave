@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './Group.css';
+import './Forms.css';
+import ScheduleForm from './Schedule';
 
 class GroupForm extends React.Component {
     constructor(props) {
@@ -21,11 +22,14 @@ class GroupForm extends React.Component {
 
     render() {
         return (
-        <form onSubmit={this.onSubmit}>
-            <label for="Group_Name">Group Name: </label><br></br>
-            <input name="group_name" id="Group_Name" type="text" value={this.state.group} onChange={this.onChange}/><br></br>
-            <input type="submit" value="Join"/>
-        </form>
+        <div>
+            <form onSubmit={this.onSubmit}>
+                <label>Group Name: </label><br></br>
+                <input className="group-input" type="text" value={this.state.group} onChange={this.onChange}/><br></br>
+                <input type="submit" value="Join"/>
+            </form>
+            <ScheduleForm />
+        </div>
         );
     }
 }
