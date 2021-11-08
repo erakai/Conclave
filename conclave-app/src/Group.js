@@ -1,5 +1,4 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
 import './Forms.css';
 import ScheduleForm from './Schedule';
 
@@ -26,7 +25,7 @@ class GroupForm extends React.Component {
             <form onSubmit={this.onSubmit}>
                 <label>Group Name: </label><br></br>
                 <input className="group-input" type="text" value={this.state.group} onChange={this.onChange}/><br></br>
-                <input type="submit" value="Join"/>
+                <input className="group-submit" type="submit" value="Join"/>
             </form>
             <ScheduleForm />
         </div>

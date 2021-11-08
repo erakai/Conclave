@@ -1,5 +1,7 @@
 import React from 'react';
 
+const path = 'https://localhost:8080/api/schedules';
+
 class ScheduleForm extends React.Component {
     constructor(props) {
         super(props);
@@ -14,7 +16,17 @@ class ScheduleForm extends React.Component {
     }
 
     onSubmit(event) {
-        alert("Submitted schedule " + this.state.schedule);
+        fetch(path, {
+            headers:{
+                'Access-Control-Allow-Origin':'*'
+            },
+        })
+            .then(response => response.json())
+            .then(data => {
+                this.setState({response: data});
+                console.log(this.state.response);
+            })
+            .catch((error) => console.error(error));
     }
 
     render() {
@@ -23,9 +35,9 @@ class ScheduleForm extends React.Component {
                 <form onSubmit={this.onSubmit}>
                     <label>Raw Schedule String: </label> <br></br>
                     <input type="text" value={this.state.schedule} onChange={this.onChange}/> <br></br>
-                    <input type="submit" value="Join"/>
+                    <input type="submit" value="Submit"/>
                 </form><br></br>
-                <textarea value={this.state.response}/>
+                <textarea value={this.state.response} readOnly={true}/>
             </div>
         );
     }
