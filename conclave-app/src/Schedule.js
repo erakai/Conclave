@@ -1,6 +1,6 @@
 import React from 'react';
 
-const path = 'https://localhost:8080/api/schedules';
+const path = 'http://localhost:8080/api/schedules';
 
 class ScheduleForm extends React.Component {
     constructor(props) {
@@ -16,17 +16,15 @@ class ScheduleForm extends React.Component {
     }
 
     onSubmit(event) {
-        fetch(path, {
-            headers:{
-                'Access-Control-Allow-Origin':'*'
-            },
-        })
+        console.log("Fetching ", path);
+        fetch(path)
             .then(response => response.json())
             .then(data => {
                 this.setState({response: data});
                 console.log(this.state.response);
             })
             .catch((error) => console.error(error));
+        alert('test')
     }
 
     render() {

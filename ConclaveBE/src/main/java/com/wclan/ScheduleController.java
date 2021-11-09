@@ -2,6 +2,7 @@ package com.wclan;
 
 
 import com.wclan.model.Schedule;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -14,10 +15,11 @@ import org.springframework.web.bind.annotation.RestController;
  * @version Nov 7, 2021
  */
 @RestController
+@CrossOrigin(origins = "http://localhost:8080")
 public class ScheduleController {
 
     @GetMapping("/api/schedule")
-    public Schedule getSchedule(@RequestParam(value = "name", defaultValue = "(No name)") String name) {
+    public Schedule getSchedule(@RequestParam(value = "name", defaultValue = "Undefined") String name) {
         return new Schedule(name);
     }
 
