@@ -1,6 +1,7 @@
 package com.wclan.model;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.Objects;
 
 /**
@@ -13,13 +14,21 @@ import java.util.Objects;
 public class Schedule {
     private @Id @GeneratedValue Long id;
     private String name;
+    @OneToMany
+    private ArrayList<TimeSlot> timeSlots;
+
+    //not sure how we would initialize timeSlots depending on input but we'll figure it out later?
+    public Schedule(String name, ArrayList<TimeSlot> timeSlots) {
+        this.name = name;
+        this.timeSlots = timeSlots;
+    }
 
     public Schedule(String name) {
-        this.name = name;
+        this(name, new ArrayList<TimeSlot>());
     }
 
     public Schedule() {
-        this("Undefined");
+        this("Undefined", new ArrayList<TimeSlot>());
     }
 
     public String getName() {
