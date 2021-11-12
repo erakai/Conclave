@@ -1,5 +1,9 @@
 package com.wclan;
 
+/*
+
+Not in use, uncomment if you want to use
+
 import com.wclan.model.Schedule;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -11,7 +15,7 @@ import org.springframework.stereotype.Component;
  *
  * @author Eric but he didn't put the javadoc in so he's bad
  * @version Nov 7, 2021
- */
+ *
 @Component
 public class DatabaseLoader implements CommandLineRunner {
 
@@ -29,3 +33,4 @@ public class DatabaseLoader implements CommandLineRunner {
         this.repository.save(new Schedule("Kian"));
     }
 }
+*/

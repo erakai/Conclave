@@ -8,6 +8,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
+ *
+ * DEPRECATED. DO NOT USE.
+ *
  * Singleton class for interacting with the database.
  *
  * The database will be created at the top level of the file system in a conclave folder (ie /Conclave/conclave.db)
@@ -28,6 +31,10 @@ public class ConclaveGateway {
 
     private static String url;
 
+    /**
+     * @deprecated
+     * dont use this!!!!!!!!!!!!!!
+     */
     public static ConclaveGateway instance() {
         if (instance == null) {
             instance = new ConclaveGateway();
