@@ -5,6 +5,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.web.bind.annotation.CrossOrigin;
 
+import java.util.Optional;
+
 /**
  * Repository definition. Required to make a REST app work due to the methods it comes with.
  *
@@ -18,8 +20,12 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 @CrossOrigin("*")
 public interface ScheduleRepository extends CrudRepository<Schedule, Long> {
 
-    Schedule getScheduleByName(String name);
+    boolean existsScheduleByName(String name);
 
-    Schedule getScheduleById(Long id);
+    Optional<Schedule> getScheduleById(Long id);
+
+    Optional<Schedule> getScheduleByName(String name);
+
+    Long removeScheduleByName(String name); // can only use Long return type...
 
 }
