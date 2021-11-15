@@ -26,7 +26,7 @@ import java.net.URI;
  */
 @BasePathAwareController
 @RestController
-@CrossOrigin(origins = "http://localhost:8080")
+@CrossOrigin(origins = {"http://localhost:8080", "http://localhost:3000"})
 public class ScheduleController {
     /**
      * example cURL command to modify the name of a schedule with a certain id:
