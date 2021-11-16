@@ -5,7 +5,7 @@ const path = 'http://localhost:8080/api/schedules';
 class ScheduleForm extends React.Component {
     constructor(props) {
         super(props);
-        this.state = {schedule: '', response: ''};
+        this.state = {schedule: ''};
 
         this.onSubmit = this.onSubmit.bind(this);
         this.onChange = this.onChange.bind(this);
@@ -17,14 +17,16 @@ class ScheduleForm extends React.Component {
 
     onSubmit(event) {
         console.log("Fetching ", path);
-        fetch(path)
+        fetch("http://localhost:8080/api/schedule?name=Eric")
             .then(response => response.json())
             .then(data => {
                 this.setState({response: data});
-                console.log(this.state.response);
+                console.log(data)
+                console.log(typeof data);
             })
             .catch((error) => console.error(error));
         alert('test')
+        event.preventDefault();
     }
 
     render() {
