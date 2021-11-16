@@ -10,8 +10,15 @@ import java.util.Objects;
  * @version Nov 07, 2021
  */
 @Entity
+@Table(name="SCHEDULE")
 public class Schedule {
-    private @Id @GeneratedValue Long id;
+
+    @Column(name="id")
+    @GeneratedValue
+    @Id
+    private Long id;
+
+    @Column(name="name")
     private String name;
 
     public Schedule(String name) {
