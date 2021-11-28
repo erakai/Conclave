@@ -1,12 +1,9 @@
 package com.wclan;
 
 
-import com.wclan.exception.ResourceAlreadyExistsException;
-import com.wclan.exception.ResourceNotFoundException;
 import com.wclan.model.Schedule;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.rest.webmvc.BasePathAwareController;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
@@ -21,7 +18,7 @@ import java.net.URI;
  *
  * Would probably be helpful to use a program like Postman to test all these functions.
  *
- * @author Eric but he didn't put the javadoc in so he's bad
+ * @author Eric
  * @version Nov 7, 2021
  */
 @BasePathAwareController
@@ -42,15 +39,11 @@ public class ScheduleController {
     @PutMapping(path="/schedules/{id}")
     public ResponseEntity<Schedule> updateSchedule(@PathVariable(value = "id") Long id,
                                                    @RequestParam(required = false) String name) {
-        try {
-            Schedule schedule = scheduleService.getScheduleById(id);
-            if (name != null)
-                schedule.setName(name);
-            Schedule updatedSchedule = scheduleService.updateSchedule(schedule);
-            return ResponseEntity.ok().body(updatedSchedule);
-        } catch (ResourceNotFoundException e) {
-            return ResponseEntity.notFound().build();
-        }
+        Schedule schedule = scheduleService.getScheduleById(id);
+        if (name != null)
+            schedule.setName(name);
+        Schedule updatedSchedule = scheduleService.updateSchedule(schedule);
+        return ResponseEntity.ok().body(updatedSchedule);
     }
 
     /**
@@ -63,12 +56,8 @@ public class ScheduleController {
      */
     @GetMapping("/schedule")
     public ResponseEntity<Schedule> getSchedule(@RequestParam(value = "name") String name) {
-        try {
-            Schedule schedule = scheduleService.getScheduleByName(name);
-            return ResponseEntity.ok().body(schedule);
-        } catch (ResourceNotFoundException e) {
-            return ResponseEntity.notFound().build();
-        }
+        Schedule schedule = scheduleService.getScheduleByName(name);
+        return ResponseEntity.ok().body(schedule);
     }
 
     /**
@@ -82,15 +71,10 @@ public class ScheduleController {
     @PostMapping("/schedules")
     public ResponseEntity<Schedule> addNewSchedule(@RequestParam(value="name") String name) {
         URI location = URI.create("/api/schedule?name="+name); // I dont think ur supposed to do this but idk
-        try {
-            Schedule schedule = new Schedule(name);
-            Schedule addedSchedule = scheduleService.saveSchedule(schedule);
-            return ResponseEntity.created(location).body(addedSchedule);
-        } catch (ResourceAlreadyExistsException e) {
-            return ResponseEntity.status(HttpStatus.SEE_OTHER)
-                    .location(location)
-                    .build();
-        }
+
+        Schedule schedule = new Schedule(name);
+        Schedule addedSchedule = scheduleService.saveSchedule(schedule);
+        return ResponseEntity.created(location).body(addedSchedule);
     }
 
     /**
@@ -104,12 +88,8 @@ public class ScheduleController {
     @DeleteMapping("/schedule")
     @Transactional // this annotation is needed for this method to work, not really sure why (:
     public ResponseEntity<Schedule> removeSchedule(@RequestParam(value="name") String name) {
-        try {
-            scheduleService.removeScheduleByName(name);
-            return ResponseEntity.ok().build();
-        } catch (ResourceNotFoundException e) {
-            return ResponseEntity.notFound().build();
-        }
+        scheduleService.removeScheduleByName(name);
+        return ResponseEntity.ok().build();
     }
 
     private final ScheduleService scheduleService;

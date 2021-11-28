@@ -12,29 +12,29 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class ScheduleService {
-    public Schedule saveSchedule(Schedule schedule) throws ResourceAlreadyExistsException {
+    public Schedule saveSchedule(Schedule schedule) {
         if (!scheduleRepository.existsScheduleByName(schedule.getName()))
             return scheduleRepository.save(schedule);
         throw new ResourceAlreadyExistsException("Schedule already exists with name: " + schedule.getName());
     }
 
-    public Schedule updateSchedule(Schedule schedule) throws ResourceNotFoundException {
+    public Schedule updateSchedule(Schedule schedule) {
         if (scheduleRepository.existsById(schedule.getId()))
             return scheduleRepository.save(schedule);
         throw new ResourceNotFoundException("Schedule doesn't exist.");
     }
 
-    public Schedule getScheduleById(Long id) throws ResourceNotFoundException {
+    public Schedule getScheduleById(Long id) {
        return scheduleRepository.getScheduleById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Can't find schedule with id="+id));
     }
 
-    public Schedule getScheduleByName(String name) throws ResourceNotFoundException {
+    public Schedule getScheduleByName(String name) {
         return scheduleRepository.getScheduleByName(name)
                 .orElseThrow(() -> new ResourceNotFoundException("Can't find schedule with name="+name));
     }
 
-    public void removeScheduleByName(String name) throws ResourceNotFoundException {
+    public void removeScheduleByName(String name) {
         Long result = scheduleRepository.removeScheduleByName(name);
         if (result < 1)
             throw new ResourceNotFoundException("Schedule doesn't exist.");
