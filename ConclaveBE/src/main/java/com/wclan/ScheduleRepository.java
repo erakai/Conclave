@@ -17,9 +17,6 @@ import org.springframework.web.bind.annotation.CrossOrigin;
  */
 @CrossOrigin("*")
 public interface ScheduleRepository extends CrudRepository<Schedule, Long> {
-
     Schedule getScheduleByName(String name);
-
     Schedule getScheduleById(Long id);
-
 }

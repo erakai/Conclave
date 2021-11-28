@@ -35,9 +35,11 @@ public class ScheduleController {
     }
 
     /**
-     * Adds a new schedule to the repository.
-     * @param name the name of the schedule owner
-     * @return JSON response indicating success (or failure somehow)
+     * Inserts a new schedule with the given name to the database. The other properties of the schedule are
+     * initialized to the default value. Normally called by users when connecting to /api/addSchedule at the address.
+     *
+     * @param name the name the schedule is associated with
+     * @return JSON response indicating success or failure at insertion. Will equal "who tf knows" if successful
      */
     @PostMapping("/addSchedule")
     public @ResponseBody String addNewSchedule(@RequestParam(value="name") String name) {
