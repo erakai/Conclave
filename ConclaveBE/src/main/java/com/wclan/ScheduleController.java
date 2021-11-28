@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
+import java.util.List;
 
 /**
  * RESTful controller for accessing, adding, removing, and modifying schedules.
@@ -21,10 +22,17 @@ import java.net.URI;
  * @author Eric
  * @version Nov 7, 2021
  */
-@BasePathAwareController
+
 @RestController
+@RequestMapping("/api/")
 @CrossOrigin(origins = {"http://localhost:8080", "http://localhost:3000"})
 public class ScheduleController {
+
+    @GetMapping("/schedules")
+    public ResponseEntity<Iterable<Schedule>> getAllSchedules() {
+        return ResponseEntity.ok().body(scheduleService.getAllSchedules());
+    }
+
     /**
      * example cURL command to modify the name of a schedule with a certain id:
      * curl -X PUT -d name=Eric http://localhost:8080/api/schedules/{insert_id_here}
@@ -47,16 +55,13 @@ public class ScheduleController {
     }
 
     /**
-     * Example cURL command to get a schedule of a certain name
-     * curl http://localhost:8080/schedule?name={insert_name_here}
-     *
-     * Attempt to retrieve a schedule from the repository by name.
-     * @param name the name of the schedule owner
+     * Attempt to retrieve a schedule from the repository by id.
+     * @param id the id of the schedule
      * @return 200 Ok containing the schedule contents if found.
      */
-    @GetMapping("/schedule")
-    public ResponseEntity<Schedule> getSchedule(@RequestParam(value = "name") String name) {
-        Schedule schedule = scheduleService.getScheduleByName(name);
+    @GetMapping("/schedules/{id}")
+    public ResponseEntity<Schedule> getScheduleById(@PathVariable(value = "id") Long id) {
+        Schedule schedule = scheduleService.getScheduleById(id);
         return ResponseEntity.ok().body(schedule);
     }
 
@@ -70,10 +75,9 @@ public class ScheduleController {
      */
     @PostMapping("/schedules")
     public ResponseEntity<Schedule> addNewSchedule(@RequestParam(value="name") String name) {
-        URI location = URI.create("/api/schedule?name="+name); // I dont think ur supposed to do this but idk
-
         Schedule schedule = new Schedule(name);
         Schedule addedSchedule = scheduleService.saveSchedule(schedule);
+        URI location = URI.create("api/schedule/"+addedSchedule.getId()); // I dont think ur supposed to do this but idk
         return ResponseEntity.created(location).body(addedSchedule);
     }
 

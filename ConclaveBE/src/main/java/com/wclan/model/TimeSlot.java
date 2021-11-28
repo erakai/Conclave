@@ -1,53 +1,82 @@
 package com.wclan.model;
 
-import javax.persistence.*;
+import com.wclan.exception.BadResourceException;
 
-@Entity
-@Table(name = "TIMESLOT")
-public class TimeSlot implements Comparable<TimeSlot> {
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Scanner;
 
-    @Id
-    @GeneratedValue
-    @Column(name = "id")
-    private Long id;
+/**
+ * This class represents a block of time in a schedule. Primarily used to assist in calculations.
+ * @author Eric
+ */
+public class TimeSlot {
 
-    @ManyToOne
-    @JoinColumn(name="schedule_id", nullable = false)
-    private Schedule schedule;
+    /**
+     * Schedules are stored as a string representation of timeslots.
+     *
+     * Currently, it looks like:
+     * {start_date}-{rating1},{available1}-{rating2},{available2} ... etc
+     */
+    public static final String TIME_SLOT_DELIM = "-";
+    public static final String TIME_SLOT_INFO_DELIM = ",";
 
-    @Column(name = "date")
+    private static final long FIFTEEN_MINUTES_MILLIS = 1000*60*15;
+
+    /**
+     * Generates list of instantiated TimeSlot objects, mainly for calculation purposes
+     * @param str the string representation of the time slots
+     * @return list of instantiated time slots
+     * @throws BadResourceException if str is improperly formatted
+     */
+    public static List<TimeSlot> timeSlotsFromString(String str) {
+        List<TimeSlot> timeSlots = new ArrayList<>();
+        try {
+            Scanner timeSlotScanner = new Scanner(str).useDelimiter(TIME_SLOT_DELIM);
+            long startDate = Long.parseLong(timeSlotScanner.next());
+
+            while (timeSlotScanner.hasNext()) {
+                String timeSlotStr = timeSlotScanner.next();
+                Scanner infoScanner = new Scanner(timeSlotStr).useDelimiter(TIME_SLOT_INFO_DELIM);
+
+                long date = startDate + FIFTEEN_MINUTES_MILLIS * timeSlots.size();
+                int rating = Integer.parseInt(infoScanner.next());
+                boolean available = Integer.parseInt(infoScanner.next()) == 1;
+                timeSlots.add(new TimeSlot(date, rating, available));
+            }
+        } catch (Exception e) {
+            throw new BadResourceException("Invalid timeslot string");
+        }
+        return timeSlots;
+    }
+
+    public static String timeSlotsToString(List<TimeSlot> timeSlots) {
+        if (timeSlots.isEmpty()) return "";
+
+        long startDate = timeSlots.get(0).getDate();
+        StringBuilder str = new StringBuilder(startDate + TIME_SLOT_DELIM);
+        for (TimeSlot timeSlot : timeSlots) {
+            str.append(timeSlot.toString()).append(TIME_SLOT_DELIM);
+        }
+        return str.substring(0, str.length()-TIME_SLOT_DELIM.length()); // remove trailing delimiter
+    }
+
     private long date;
 
-    @Column(name = "rating")
     private int rating;
 
-    public TimeSlot(Schedule schedule, long date, int rating) {
-        this.schedule = schedule;
+    private boolean available;
+
+    /**
+     * Constructs a new TimeSlot object.
+     * @param date the date this TimeSlot represents, in milliseconds since the epoch
+     * @param rating the user's rating of how well this timeslot works for them
+     * @param available whether the slot is available or not
+     */
+    public TimeSlot(long date, int rating, boolean available) {
         this.date = date;
         this.rating = rating;
-    }
-
-    public TimeSlot(Schedule schedule) {
-        this.schedule = schedule;
-    }
-
-    public TimeSlot() {
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public Schedule getSchedule() {
-        return schedule;
-    }
-
-    public void setSchedule(Schedule schedule) {
-        this.schedule = schedule;
+        this.available = available;
     }
 
     public long getDate() {
@@ -66,11 +95,16 @@ public class TimeSlot implements Comparable<TimeSlot> {
         this.rating = rating;
     }
 
-    public int compareTo(TimeSlot other) {
-        long diff = this.date - other.date;
-        if (diff>0) return 1;
-        else if (diff<0) return -1;
-        return 0;
+    public boolean isAvailable() {
+        return available;
+    }
+
+    public void setAvailable(boolean available) {
+        this.available = available;
+    }
+
+    public String toString() {
+        return "" + rating + TIME_SLOT_INFO_DELIM + available;
     }
 
 }

@@ -1,7 +1,6 @@
 package com.wclan.model;
 
 import javax.persistence.*;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -15,59 +14,33 @@ import java.util.List;
 public class Schedule {
 
     @Column(name="schedule_id")
-    @GeneratedValue
+    @GeneratedValue(strategy=GenerationType.AUTO)
     @Id
     private Long id;
 
     @Column(name="name")
     private String name;
 
-    @OneToMany(mappedBy = "schedule")
-    private List<TimeSlot> timeSlots;
+    @Column(name="time_slots")
+    private String timeSlotString;
+    private transient List<TimeSlot> timeSlots;
 
     /**
-     * Constructor for the Schedule class.
-     * @param name the name of the owner of the schedule
-     * @param start the date of the beginning of the range of the schedule.
-     * @param end the date of the end of the range of the schedule.
+     * Constructor for the schedule class.
+     * @param name the name of the owner of the schedule.
+     * @param timeSlotString the string representation of the 15-minute time slots in the schedule.
      */
-    public Schedule(String name, long start, long end) {
+    public Schedule(String name, String timeSlotString) {
         this.name = name;
-        this.timeSlots = populateTimeSlots(start, end);
+        this.timeSlotString = timeSlotString;
     }
 
     //temporary
     public Schedule(String name) {
-        this(name, 0, 0);
+        this(name, "");
     }
 
     public Schedule() {
-        this("Undefined", 0, 0);
-    }
-
-
-    /**
-     * Populates time slot list. Time slots are instantiated in increments of 15 minutes. The list will always begin
-     * at the same time or before the starting date, and finish at the same time or after the ending date.
-     *
-     * @param start the starting date range of the schedule
-     * @param end the ending date range of the schedule
-     */
-    List<TimeSlot> populateTimeSlots(long start, long end) {
-        final long fifteenMinutesMillis = 1000*60*15;
-        List<TimeSlot> timeSlots = new ArrayList<>();
-
-        // find closest 15 min time interval to the starting date (rounding down)
-        // this is calculated in milliseconds since the Jan 1st 1970 epoch
-        long currentTime = start - (start % fifteenMinutesMillis);
-
-        // generate time slots in 15 minute intervals
-        while (currentTime >= end) {
-            TimeSlot timeSlot = new TimeSlot(this, currentTime, 0);
-            timeSlots.add(timeSlot);
-            currentTime += fifteenMinutesMillis;
-        }
-        return timeSlots;
     }
 
     public String getName() {
@@ -86,12 +59,18 @@ public class Schedule {
         this.id = id;
     }
 
-    public List<TimeSlot> getTimeSlots() {
+    public String getTimeSlotString() {
+        return timeSlotString;
+    }
+
+    public void setTimeSlotString(String timeSlotString) {
+        this.timeSlotString = timeSlotString;
+    }
+
+    // can't name it as "getTimeSlots" or Spring will get angry
+    public List<TimeSlot> timeSlots() {
+        if (this.timeSlots == null)
+            this.timeSlots = TimeSlot.timeSlotsFromString(this.timeSlotString);
         return timeSlots;
     }
-
-    public void setTimeSlots(List<TimeSlot> timeSlots) {
-        this.timeSlots = timeSlots;
-    }
-
 }

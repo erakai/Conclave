@@ -1,8 +1,5 @@
 package com.wclan.exception;
 
-import com.wclan.exception.BadResourceException;
-import com.wclan.exception.ResourceAlreadyExistsException;
-import com.wclan.exception.ResourceNotFoundException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,7 +10,9 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 
 
 /**
- * Manages exceptions thrown by the application globally.
+ * Manages exceptions thrown by the application globally. Most exceptions will currently be found thrown in the
+ * ScheduleService class.
+ * TODO make this better
  */
 @ControllerAdvice
 public class APIExceptionHandler extends ResponseEntityExceptionHandler {

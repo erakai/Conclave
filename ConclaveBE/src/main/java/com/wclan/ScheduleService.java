@@ -24,6 +24,10 @@ public class ScheduleService {
         throw new ResourceNotFoundException("Schedule doesn't exist.");
     }
 
+    public Iterable<Schedule> getAllSchedules() {
+        return scheduleRepository.findAll();
+    }
+
     public Schedule getScheduleById(Long id) {
        return scheduleRepository.getScheduleById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Can't find schedule with id="+id));
