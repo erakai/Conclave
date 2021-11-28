@@ -14,7 +14,7 @@ import java.util.Optional;
  *
  * TODO add more functions as needed
  *
- * @author Eric but he didn't put the javadoc in so he's bad
+ * @author Eric
  * @version Nov 7, 2021
  */
 @CrossOrigin("*")
@@ -26,6 +26,6 @@ public interface ScheduleRepository extends CrudRepository<Schedule, Long> {
 
     Optional<Schedule> getScheduleByName(String name);
 
-    Long removeScheduleByName(String name); // can only use Long return type...
+    Long removeScheduleById(Long id);
 
 }

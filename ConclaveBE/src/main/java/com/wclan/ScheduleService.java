@@ -30,16 +30,16 @@ public class ScheduleService {
 
     public Schedule getScheduleById(Long id) {
        return scheduleRepository.getScheduleById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Can't find schedule with id="+id));
+                .orElseThrow(() -> new ResourceNotFoundException("Can't find schedule with id: " + id));
     }
 
     public Schedule getScheduleByName(String name) {
         return scheduleRepository.getScheduleByName(name)
-                .orElseThrow(() -> new ResourceNotFoundException("Can't find schedule with name="+name));
+                .orElseThrow(() -> new ResourceNotFoundException("Can't find schedule with name: " + name));
     }
 
-    public void removeScheduleByName(String name) {
-        Long result = scheduleRepository.removeScheduleByName(name);
+    public void removeScheduleById(Long id) {
+        Long result = scheduleRepository.removeScheduleById(id);
         if (result < 1)
             throw new ResourceNotFoundException("Schedule doesn't exist.");
     }

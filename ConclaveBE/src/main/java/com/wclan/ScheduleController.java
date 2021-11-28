@@ -3,13 +3,11 @@ package com.wclan;
 
 import com.wclan.model.Schedule;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.rest.webmvc.BasePathAwareController;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
-import java.util.List;
 
 /**
  * RESTful controller for accessing, adding, removing, and modifying schedules.
@@ -27,11 +25,6 @@ import java.util.List;
 @RequestMapping("/api/")
 @CrossOrigin(origins = {"http://localhost:8080", "http://localhost:3000"})
 public class ScheduleController {
-
-    @GetMapping("/schedules")
-    public ResponseEntity<Iterable<Schedule>> getAllSchedules() {
-        return ResponseEntity.ok().body(scheduleService.getAllSchedules());
-    }
 
     /**
      * example cURL command to modify the name of a schedule with a certain id:
@@ -66,6 +59,21 @@ public class ScheduleController {
     }
 
     /**
+     * Example cURL command to remove a schedule with a certain id:
+     * curl -X DELETE localhost:8080/api/schedules/1
+     *
+     * Removes schedule from the repository if it exists.
+     * @param id the id of the schedule to be removed
+     * @return 200 Ok if successfully removed, otherwise 404 Not Found
+     */
+    @DeleteMapping("/schedules/{id}")
+    @Transactional // this annotation is needed for this method to work, not really sure why (:
+    public ResponseEntity<Void> removeScheduleById(@PathVariable Long id) {
+        scheduleService.removeScheduleById(id);
+        return ResponseEntity.ok().build();
+    }
+
+    /**
      * Example cURL command to add a schedule with a certain name:
      * curl -X POST -d name=Eric http://localhost:8080/schedules
      *
@@ -81,19 +89,9 @@ public class ScheduleController {
         return ResponseEntity.created(location).body(addedSchedule);
     }
 
-    /**
-     * Example cURL command to remove a schedule with a certain name:
-     * curl -X DELETE -d name=Eric http://localhost:8080/schedule
-     *
-     * Removes schedule from the repository if it exists.
-     * @param name the name of the schedule owner
-     * @return 200 Ok if successfully removed, otherwise 404 Not Found
-     */
-    @DeleteMapping("/schedule")
-    @Transactional // this annotation is needed for this method to work, not really sure why (:
-    public ResponseEntity<Schedule> removeSchedule(@RequestParam(value="name") String name) {
-        scheduleService.removeScheduleByName(name);
-        return ResponseEntity.ok().build();
+    @GetMapping("/schedules")
+    public ResponseEntity<Iterable<Schedule>> getAllSchedules() {
+        return ResponseEntity.ok().body(scheduleService.getAllSchedules());
     }
 
     private final ScheduleService scheduleService;
