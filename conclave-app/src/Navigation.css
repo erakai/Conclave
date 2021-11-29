@@ -1,0 +1,9 @@
+/* why doesnt this work pls */
+
+.selected {
+    font-size: 40px;
+}
+
+.not-selected {
+    font-size: 20px;
+}
