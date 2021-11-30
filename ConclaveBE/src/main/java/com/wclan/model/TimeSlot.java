@@ -16,10 +16,11 @@ public class TimeSlot {
      * Schedules are stored as a string representation of timeslots.
      *
      * Currently, it looks like:
-     * {start_date}-{rating1},{available1}-{rating2},{available2} ... etc
+     * {start_date}-{rating1}-{available1}-{rating2}-{available2} ... etc
      */
-    public static final String TIME_SLOT_DELIM = "-";
-    public static final String TIME_SLOT_INFO_DELIM = ",";
+    protected static final String TIME_SLOT_DELIM = "-";
+    protected static final int AVAILABLE = 1,
+                               UNAVAILABLE = 0;
 
     private static final long FIFTEEN_MINUTES_MILLIS = 1000*60*15;
 
@@ -36,12 +37,11 @@ public class TimeSlot {
             long startDate = Long.parseLong(timeSlotScanner.next());
 
             while (timeSlotScanner.hasNext()) {
-                String timeSlotStr = timeSlotScanner.next();
-                Scanner infoScanner = new Scanner(timeSlotStr).useDelimiter(TIME_SLOT_INFO_DELIM);
-
                 long date = startDate + FIFTEEN_MINUTES_MILLIS * timeSlots.size();
-                int rating = Integer.parseInt(infoScanner.next());
-                boolean available = Integer.parseInt(infoScanner.next()) == 1;
+
+                int rating = Integer.parseInt(timeSlotScanner.next());
+                boolean available = Integer.parseInt(timeSlotScanner.next()) == AVAILABLE;
+
                 timeSlots.add(new TimeSlot(date, rating, available));
             }
         } catch (Exception e) {
@@ -104,7 +104,7 @@ public class TimeSlot {
     }
 
     public String toString() {
-        return "" + rating + TIME_SLOT_INFO_DELIM + available;
+        return "" + rating + TIME_SLOT_DELIM + available;
     }
 
 }

@@ -21,6 +21,12 @@ import java.util.Optional;
 @CrossOrigin("*")
 public interface ScheduleRepository extends CrudRepository<Schedule, Long> {
 
-    Optional<List<Schedule>> findSchedulesByGroup(Group group);
+    boolean existsByIdAndGroup_Id(Long id, Long groupId);
+
+    Optional<Schedule> findScheduleByIdAndGroup_Id(Long id, Long groupId);
+
+    Iterable<Schedule> findSchedulesByGroup_Id(Long groupId);
+
+    void deleteByIdAndGroup_Id(Long id, Long groupId);
 
 }
