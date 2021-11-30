@@ -11,5 +11,6 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 public class ResourceAlreadyExistsException extends APIException {
     public ResourceAlreadyExistsException(String msg) {
         super(msg);
+        this.body.put("status", HttpStatus.CONFLICT);
     }
 }

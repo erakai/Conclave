@@ -20,7 +20,7 @@ public class Group {
     @GeneratedValue(strategy=GenerationType.AUTO)
     private Long id;
 
-    @Column(name="group_name")
+    @Column(name="event_name")
     private String eventName;
 
     @OneToMany(targetEntity=Schedule.class, mappedBy="group")

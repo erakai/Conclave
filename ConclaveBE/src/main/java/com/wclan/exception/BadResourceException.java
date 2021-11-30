@@ -12,5 +12,6 @@ public class BadResourceException extends APIException {
     // maybe add custom reasons
     public BadResourceException(String msg) {
         super(msg);
+        this.body.put("status", HttpStatus.BAD_REQUEST);
     }
 }

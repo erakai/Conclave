@@ -4,6 +4,7 @@ import com.wclan.exception.BadResourceException;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Scanner;
 
 /**
@@ -31,6 +32,9 @@ public class TimeSlot {
      * @throws BadResourceException if str is improperly formatted
      */
     public static List<TimeSlot> timeSlotsFromString(String str) {
+        if (str.isEmpty())
+            throw new BadResourceException("Timeslot string cannot be empty.");
+
         List<TimeSlot> timeSlots = new ArrayList<>();
         try {
             Scanner timeSlotScanner = new Scanner(str).useDelimiter(TIME_SLOT_DELIM);
@@ -44,8 +48,11 @@ public class TimeSlot {
 
                 timeSlots.add(new TimeSlot(date, rating, available));
             }
-        } catch (Exception e) {
-            throw new BadResourceException("Invalid timeslot string");
+        } catch (NumberFormatException e) {
+            throw new BadResourceException("Timeslot string must only consist of numbers delimited by '"
+                    + TIME_SLOT_DELIM + "'.");
+        } catch (NoSuchElementException e) {
+            throw new BadResourceException("Timeslot string is improperly formatted.");
         }
         return timeSlots;
     }

@@ -121,8 +121,8 @@ public class APIController {
     }
 
     @PostMapping("/groups")
-    public ResponseEntity<Group> addGroup(@RequestParam(value="name") String name) {
-        Group group = new Group(name);
+    public ResponseEntity<Group> addGroup(@RequestParam(value= "eventName") String eventName) {
+        Group group = new Group(eventName);
         Group addedGroup = apiService.addGroup(group);
         URI location = URI.create("api/groups/"+addedGroup.getId());
         return ResponseEntity.created(location).body(group);

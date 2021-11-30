@@ -19,20 +19,19 @@ public class APIExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(ResourceAlreadyExistsException.class)
     protected ResponseEntity<Object> handleConflict(ResourceAlreadyExistsException ex, WebRequest request) {
-        String bodyOfResponse = ex.getMessage();
-        return super.handleExceptionInternal(ex, bodyOfResponse,
+        return super.handleExceptionInternal(ex, ex.body(),
                 new HttpHeaders(), HttpStatus.CONFLICT, request);
     }
 
     @ExceptionHandler(ResourceNotFoundException.class)
     protected ResponseEntity<Object> handleNotFound(ResourceNotFoundException ex, WebRequest request) {
-        return super.handleExceptionInternal(ex, "hi",
+        return super.handleExceptionInternal(ex, ex.body(),
                 new HttpHeaders(), HttpStatus.NOT_FOUND, request);
     }
 
     @ExceptionHandler(BadResourceException.class)
     protected ResponseEntity<Object> handleBadResource(BadResourceException ex, WebRequest request) {
-        return super.handleExceptionInternal(ex, "hello",
+        return super.handleExceptionInternal(ex, ex.body(),
                 new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
     }
 

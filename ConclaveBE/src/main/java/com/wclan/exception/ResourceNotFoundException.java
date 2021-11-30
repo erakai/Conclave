@@ -11,5 +11,6 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 public class ResourceNotFoundException extends APIException {
     public ResourceNotFoundException(String msg) {
         super(msg);
+        this.body.put("status", HttpStatus.NOT_FOUND);
     }
 }

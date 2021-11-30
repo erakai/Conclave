@@ -17,7 +17,7 @@ public class APIService {
         if (schedule.getId() == null || !scheduleRepository.existsById(schedule.getId())) {
             return scheduleRepository.save(schedule);
         } else {
-            throw new ResourceAlreadyExistsException("Schedule already exists with name: " + schedule.getName());
+            throw new ResourceAlreadyExistsException("The schedule already exists.");
         }
     }
 
@@ -25,52 +25,52 @@ public class APIService {
         if (scheduleRepository.existsById(schedule.getId())) {
             return scheduleRepository.save(schedule);
         } else {
-            throw new ResourceNotFoundException("Schedule doesn't exist.");
+            throw new ResourceNotFoundException("The schedule does not exist.");
         }
     }
 
     public Iterable<Schedule> findSchedulesByGroup_Id(Long groupId) {
         Group group = groupRepository.findById(groupId)
-                .orElseThrow(() -> new ResourceNotFoundException("Group doesn't exist."));
+                .orElseThrow(() -> new ResourceNotFoundException("The group does not exist."));
         return group.getSchedules();
     }
 
     public Schedule findScheduleByIdAndGroup_Id(Long id, Long groupId) {
         return scheduleRepository.findScheduleByIdAndGroup_Id(id, groupId)
-                .orElseThrow(() -> new ResourceNotFoundException("Can't find schedule in group"));
+                .orElseThrow(() -> new ResourceNotFoundException("The schedule does not exist in this group."));
     }
 
     public void deleteScheduleByIdAndGroup_Id(Long id, Long groupId) {
         if (scheduleRepository.existsByIdAndGroup_Id(id, groupId)) {
             scheduleRepository.deleteByIdAndGroup_Id(id, groupId);
         } else {
-            throw new ResourceNotFoundException("Schedule doesn't exist.");
+            throw new ResourceNotFoundException("The schedule does not exist in this group.");
         }
     }
 
     public Group addGroup(Group group) {
         if (group.getId() == null || !groupRepository.existsById(group.getId()))
             return groupRepository.save(group);
-        throw new ResourceAlreadyExistsException("Group already exists");
+        throw new ResourceAlreadyExistsException("The group already exists.");
     }
 
     public Group updateGroup(Group group) {
         if (groupRepository.existsById(group.getId()))
             return groupRepository.save(group);
-        throw new ResourceNotFoundException("Group doesn't exist.");
+        throw new ResourceNotFoundException("The group does not exist.");
     }
 
     public void deleteGroupById(Long id) {
         if (groupRepository.existsById(id)) {
             groupRepository.deleteById(id);
         } else {
-            throw new ResourceNotFoundException("Group doesn't exist.");
+            throw new ResourceNotFoundException("The group does not exist.");
         }
     }
 
     public Group findGroupById(Long id) {
         return groupRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Group doesn't exist."));
+                .orElseThrow(() -> new ResourceNotFoundException("The group does not exist."));
     }
 
     public Iterable<Group> findAllGroups() {
