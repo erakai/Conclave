@@ -2,9 +2,12 @@ package com.wclan;
 
 import com.wclan.exception.ResourceAlreadyExistsException;
 import com.wclan.exception.ResourceNotFoundException;
+import com.wclan.model.Group;
 import com.wclan.model.Schedule;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 /**
  * Service layer class. Deals with all the "business logic"
@@ -12,8 +15,8 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class ScheduleService {
-    public Schedule saveSchedule(Schedule schedule) {
-        if (!scheduleRepository.existsScheduleByName(schedule.getName()))
+    public Schedule addSchedule(Schedule schedule) {
+        if (!scheduleRepository.existsById(schedule.getId()))
             return scheduleRepository.save(schedule);
         throw new ResourceAlreadyExistsException("Schedule already exists with name: " + schedule.getName());
     }
@@ -24,26 +27,23 @@ public class ScheduleService {
         throw new ResourceNotFoundException("Schedule doesn't exist.");
     }
 
-    public Iterable<Schedule> getAllSchedules() {
-        return scheduleRepository.findAll();
+    public List<Schedule> findSchedulesByGroup(Group group) {
+        return scheduleRepository.findSchedulesByGroup(group)
+                .orElseThrow(() -> new ResourceNotFoundException("Group doesn't exist"));
     }
 
-    public Schedule getScheduleById(Long id) {
-       return scheduleRepository.getScheduleById(id)
+    public Schedule findScheduleById(Long id) {
+       return scheduleRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Can't find schedule with id: " + id));
     }
 
-    public Schedule getScheduleByName(String name) {
-        return scheduleRepository.getScheduleByName(name)
-                .orElseThrow(() -> new ResourceNotFoundException("Can't find schedule with name: " + name));
-    }
-
-    public void removeScheduleById(Long id) {
-        Long result = scheduleRepository.removeScheduleById(id);
-        if (result < 1)
+    public void deleteScheduleById(Long id) {
+        if (scheduleRepository.existsById(id)) {
+            scheduleRepository.deleteById(id);
+        } else {
             throw new ResourceNotFoundException("Schedule doesn't exist.");
+        }
     }
-
 
     private final ScheduleRepository scheduleRepository;
     @Autowired

@@ -1,10 +1,11 @@
 package com.wclan;
 
+import com.wclan.model.Group;
 import com.wclan.model.Schedule;
-import org.springframework.context.annotation.Bean;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.web.bind.annotation.CrossOrigin;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -20,12 +21,6 @@ import java.util.Optional;
 @CrossOrigin("*")
 public interface ScheduleRepository extends CrudRepository<Schedule, Long> {
 
-    boolean existsScheduleByName(String name);
-
-    Optional<Schedule> getScheduleById(Long id);
-
-    Optional<Schedule> getScheduleByName(String name);
-
-    Long removeScheduleById(Long id);
+    Optional<List<Schedule>> findSchedulesByGroup(Group group);
 
 }
