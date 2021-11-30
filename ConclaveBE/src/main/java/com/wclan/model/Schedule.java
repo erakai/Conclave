@@ -41,11 +41,6 @@ public class Schedule {
         this.group = group;
     }
 
-    //temporary
-    public Schedule(String name) {
-        this(name, "", null);
-    }
-
     public Schedule() {
     }
 

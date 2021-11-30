@@ -74,13 +74,10 @@ public class APIController {
     }
 
     /**
-     * Example cURL command to remove a schedule with a certain id:
-     * curl -X DELETE localhost:8080/api/schedules/1
-     *
      * Removes schedule from the repository if it exists.
      * @param groupId the id of the group this schedule is in
      * @param scheduleId the id of the schedule
-     * @return 200 Ok if successfully removed, otherwise 404 Not Found
+     * @return 204 No Content if successfully removed, otherwise 404 Not Found
      */
     @DeleteMapping("/groups/{gId}/schedules/{sId}")
     @Transactional // this annotation is needed for this method to work, not really sure why (:
@@ -88,7 +85,7 @@ public class APIController {
             @PathVariable(value="gId") Long groupId,
             @PathVariable(value="sId") Long scheduleId) {
         apiService.deleteScheduleByIdAndGroup_Id(scheduleId, groupId);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.noContent().build();
     }
 
     // do we need to delete the corresponding schedules too or is that already handled?
@@ -96,7 +93,7 @@ public class APIController {
     @Transactional
     public ResponseEntity<Void> deleteGroupById(@PathVariable Long id) {
         apiService.deleteGroupById(id);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.noContent().build();
     }
 
     /**
